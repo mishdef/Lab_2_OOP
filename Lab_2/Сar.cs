@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Lab_2
 {
@@ -275,7 +277,7 @@ namespace Lab_2
             }
         }
 
-        private double CalculateFuelConsumption(double distanceDrivenKM)
+        private double CalculateFuelConsumption(double distanceDrivenKM) //private
         {
             double litersPerKM = _fuelConsumptionPer100km / 100.0;
             return litersPerKM * distanceDrivenKM;
@@ -330,8 +332,8 @@ namespace Lab_2
 
         public override string ToString()
         {
-            return $"Car: {MarkAndModel}, Color: {Color}, HorsePower: {_horsePower}, Weight: {_weight}, Milage: {_milage:F2} km, " +
-                   $"MaxSpeed: {_maxSpeed:F2} km/h, Fuel: {_currentFuel:F2}/{_fuelCapacity} liters, Number of doors: {NumberOfDoors}";
+            return $"Car: {MarkAndModel}, Color: {Color}, HorsePower: {HorsePower}, Weight: {Weight}, Milage: {Milage:F2} km, CurrentSpeed: {CurrentSpeed:F2} km/h ," +
+                  $"MaxSpeed: {MaxSpeed:F2} km/h, Fuel: {CurrentFuel:F2}/{FuelCapacity} liters. Fuel per 100km: {FuelConsumptionPer100km:F2} liters.";
         }
     }
 }

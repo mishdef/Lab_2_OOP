@@ -1,7 +1,7 @@
 ﻿using MyFunctions;
 using static MyFunctions.Tools;
 
-namespace Lab_1
+namespace Lab_2
 {
     internal class Program
     {
@@ -71,11 +71,11 @@ namespace Lab_1
 
             var seedDataItems = new[]
             {
-                new { MarkAndModel = "Audi A4", Color = Color.Red, HorsePower = 150f, Weight = 1550m, Milage = 12000.0, FuelConsumptionPer100km = 10.0, FuelCapacity = 60.0, ProductionDate = new DateTime(2022, 1, 1) },
-                new { MarkAndModel = "Audi A6", Color = Color.Black, HorsePower = 250f, Weight = 1800m, Milage = 0.0, FuelConsumptionPer100km = 14.0, FuelCapacity = 70.0, ProductionDate = new DateTime(2020, 6, 12) },
-                new { MarkAndModel = "BMW M3", Color = Color.Blue, HorsePower = 420f, Weight = 1600m, Milage = 85000.0, FuelConsumptionPer100km = 16.0, FuelCapacity = 63.0, ProductionDate = new DateTime(2008, 5, 17) },
-                new { MarkAndModel = "Mini Classic", Color = Color.Green, HorsePower = 40f, Weight = 650m, Milage = 0.0, FuelConsumptionPer100km = 6.0, FuelCapacity = 30.0, ProductionDate = new DateTime(1995, 3, 4) },
-                new { MarkAndModel = "Ford F-150", Color = Color.Black, HorsePower = 400f, Weight = 2500m, Milage = 25000.0, FuelConsumptionPer100km = 24.0, FuelCapacity = 120.0, ProductionDate = new DateTime(2021, 1, 1) }
+                new { Mark = "Audi", Model = "A4", Color = Color.Red, HorsePower = 150f, Weight = 1550m, Milage = 12000.0, FuelConsumptionPer100km = 10.0, FuelCapacity = 60.0, ProductionDate = new DateTime(2022, 1, 1) },
+                new { Mark = "Audi", Model = "A6", Color = Color.Black, HorsePower = 250f, Weight = 1800m, Milage = 0.0, FuelConsumptionPer100km = 14.0, FuelCapacity = 70.0, ProductionDate = new DateTime(2020, 6, 12) },
+                new { Mark = "BMW", Model = "M3", Color = Color.Blue, HorsePower = 420f, Weight = 1600m, Milage = 85000.0, FuelConsumptionPer100km = 16.0, FuelCapacity = 63.0, ProductionDate = new DateTime(2008, 5, 17) },
+                new { Mark = "Mini", Model = "Cooper", Color = Color.Green, HorsePower = 40f, Weight = 650m, Milage = 0.0, FuelConsumptionPer100km = 6.0, FuelCapacity = 30.0, ProductionDate = new DateTime(1995, 3, 4) },
+                new { Mark = "Ford", Model = "F-150", Color = Color.Black, HorsePower = 400f, Weight = 2500m, Milage = 25000.0, FuelConsumptionPer100km = 24.0, FuelCapacity = 120.0, ProductionDate = new DateTime(2021, 1, 1) }
             };
 
             int initialCarsCount = cars.Length;
@@ -83,9 +83,9 @@ namespace Lab_1
 
             foreach (var item in seedDataItems)
             {
-                if (cars.Length < maxCapacity) 
+                if (cars.Length < maxCapacity)
                 {
-                    AddCar(item.MarkAndModel, item.Color, item.HorsePower, item.Weight, item.Milage, item.FuelConsumptionPer100km, item.FuelCapacity, item.ProductionDate);
+                    AddCar(item.Mark, item.Model, item.Color, item.HorsePower, item.Weight, item.Milage, item.FuelConsumptionPer100km, item.FuelCapacity, item.ProductionDate);
                     carsAddedCount++;
                 }
                 else
@@ -137,7 +137,8 @@ namespace Lab_1
                 return;
             }
 
-            string markAndModel = InputString("Enter the cars mark and model: ", 1, 20);
+            string mark = InputString("Enter the cars mark: ", 1, 20);
+            string model = InputString("Enter the cars model: ", 1, 20);
             Color color = (Color)InputInt("Choose the cars color:\n0. Red\n1. Blue\n2. Green\n3. Black\n4. White\n5. Grey\nYour choice: ", InputType.With, 0, 5);
             float horsePower = (float)InputDouble("Enter the car's horse power: ", InputType.With, 20, 2000);
             decimal weight = (decimal)InputDouble("Enter the car's weight (kg): ", InputType.With, 400, 8000);
@@ -146,27 +147,30 @@ namespace Lab_1
             double fuelCapacity = InputDouble("Enter the cars fuel capacity (l): ", InputType.With, 20, 200);
             DateTime dateTime = InputDateTime("Enter the cars production date: ", new DateTime(1886, 1, 1), DateTime.Now);
 
-            Console.WriteLine(AddCar(markAndModel, color, horsePower, weight, milage, fuelConsumption, fuelCapacity, dateTime));
+            Console.WriteLine(AddCar(mark, model, color, horsePower, weight, milage, fuelConsumption, fuelCapacity, dateTime));
         }
 
-        static string AddCar(string markAndModel, Color color, float horsePower, decimal weight, double milage, double fuelConsumption, double fuelCapacity, DateTime productiDate)
+        static string AddCar(string mark, string model, Color color, float horsePower, decimal weight, double milage, double fuelConsumption, double fuelCapacity, DateTime productiDate)
         {
             Array.Resize(ref cars, cars.Length + 1);
-            cars[cars.Length - 1] = new Car();
-            cars[cars.Length - 1].markAndModel = markAndModel;
-            cars[cars.Length - 1].color = color;
-            cars[cars.Length - 1].horsePower = horsePower;
-            cars[cars.Length - 1].weight = weight;
-            cars[cars.Length - 1].milage = milage;
-            cars[cars.Length - 1].fuelConsumptionPer100km = fuelConsumption; //new
-            cars[cars.Length - 1].fuelCapacity = fuelCapacity;
-            cars[cars.Length - 1].currentFuel = fuelCapacity;
 
-            cars[cars.Length - 1].maxSpeed = cars[cars.Length - 1].horsePower / (float)cars[cars.Length - 1].weight * 1000;
-            if (cars[cars.Length - 1].maxSpeed < 50) cars[cars.Length - 1].maxSpeed = 50;
-            cars[cars.Length - 1].productionDate = productiDate;
+            cars[cars.Length - 1] = new Car
+            {
+                Mark = mark,
+                Model = model,
+                Color = color,
+                HorsePower = horsePower,
+                Weight = weight,
+                Milage = milage,
+                FuelConsumptionPer100km = fuelConsumption,
+                FuelCapacity = fuelCapacity,
+                ProductionDate = productiDate
+            };
+            cars[cars.Length - 1].CurrentFuel = fuelCapacity;
+
             return "Car added successfully";
         }
+
 
         static void ShowAllCars()
         {
@@ -201,7 +205,7 @@ namespace Lab_1
                 PrintHeader();
                 for (int i = 0; i < cars.Length; i++)
                 {
-                    if (cars[i].markAndModel.ToLower().Contains(text.ToLower()))
+                    if (cars[i].MarkAndModel.ToLower().Contains(text.ToLower()))
                     {
                         PrintCarLine(i + 1, cars[i]);
                         anyFound = true;
@@ -215,7 +219,7 @@ namespace Lab_1
                 PrintHeader();
                 for (int i = 0; i < cars.Length; i++)
                 {
-                    if (cars[i].color == searchColor)
+                    if (cars[i].Color == searchColor)
                     {
                         PrintCarLine(i + 1, cars[i]);
                         anyFound = true;
@@ -246,12 +250,12 @@ namespace Lab_1
             {
                 case 1:
                     string searchText = InputString("Enter search prompt of mark/model: ");
-                    for (int i = 0; i < cars.Length; i++)
+                    for (int i = 0; i < cars.Length - itemsRemovedCount; i++)
                     {
-                        if (cars[i].markAndModel.ToLower().Contains(searchText.ToLower()))
+                        if (cars[i].MarkAndModel.ToLower().Contains(searchText.ToLower()))
                         {
-                            if (removedNamesString == "") removedNamesString = cars[i].markAndModel;
-                            else removedNamesString += ", " + cars[i].markAndModel;
+                            if (removedNamesString == "") removedNamesString = cars[i].MarkAndModel;
+                            else removedNamesString += ", " + cars[i].MarkAndModel;
 
                             itemsRemovedCount++;
 
@@ -267,12 +271,12 @@ namespace Lab_1
                 case 2:
                     int colorVal = InputInt("Choose color:\n0. Red\n1. Blue\n2. Green\n3. Black\n4. White\n5. Grey\nYour choice: ", InputType.With, 0, 5);
                     Color searchColor = (Color)colorVal;
-                    for (int i = 0; i < cars.Length; i++)
+                    for (int i = 0; i < cars.Length - itemsRemovedCount; i++)
                     {
-                        if (cars[i].color == searchColor)
+                        if (cars[i].Color == searchColor)
                         {
-                            if (removedNamesString == "") removedNamesString = cars[i].markAndModel;
-                            else removedNamesString += ", " + cars[i].markAndModel;
+                            if (removedNamesString == "") removedNamesString = cars[i].MarkAndModel;
+                            else removedNamesString += ", " + cars[i].MarkAndModel;
 
                             itemsRemovedCount++;
 
@@ -287,32 +291,20 @@ namespace Lab_1
 
                 case 3:
                     ShowAllCars();
-                    int indexToDelete;
-                    do
+                    int indexToDelete = InputInt("Enter index of car to remove (or 0 to cancel): ", InputType.With, 0, cars.Length);
+                    if (indexToDelete == 0)
                     {
-                        indexToDelete = InputInt("Enter index of car to remove (or 0 to cancel): ", InputType.With, 0, cars.Length);
-                        if (indexToDelete == 0)
-                        {
-                            Console.WriteLine("Removal cancelled");
-                            return;
-                        }
+                        Console.WriteLine("Removal cancelled");
+                        return;
+                    }
 
-                        if (indexToDelete < 1 || indexToDelete > cars.Length)
-                        {
-                            Console.WriteLine("Invalid index. Please try again...");
-                        }
-                        else
-                        {
-                            removedNamesString = cars[indexToDelete - 1].markAndModel;
-                            itemsRemovedCount = 1;
+                    removedNamesString = cars[indexToDelete - 1].MarkAndModel;
+                    itemsRemovedCount = 1;
 
-                            for (int i = indexToDelete - 1; i < cars.Length - 1; i++)
-                            {
-                                cars[i] = cars[i + 1];
-                            }
-                            break;
-                        }
-                    } while (true);
+                    for (int i = indexToDelete - 1; i < cars.Length - 1; i++)
+                    {
+                        cars[i] = cars[i + 1];
+                    }
                     break;
             }
 
@@ -327,6 +319,7 @@ namespace Lab_1
             MessageBox.Show($"Removed the following cars: {removedNamesString}. Total cars remaining: {cars.Length}");
         }
 
+
         static void InteractWithCar(Car carSel)
         {
             do
@@ -334,17 +327,18 @@ namespace Lab_1
                 try
                 {
                     MessageBox.BoxItem("   Behaviour Menu   ");
-                    Console.WriteLine(carSel);
+                    PrintHeader();
+                    PrintCarLine(0, carSel);
                     Console.WriteLine("1. Start engine");
                     Console.WriteLine("2. Stop engine");
                     Console.WriteLine("3. Speed up");
                     Console.WriteLine("4. Slow down");
                     Console.WriteLine("5. Ride the car");
-                    Console.WriteLine("6. Refuel\n");
+                    Console.WriteLine("6. Refuel");
+                    Console.WriteLine("7. Change properties\n");
+                    Console.WriteLine("0. Main menu\n");
 
-                    Console.WriteLine("0. Main menu");
-
-                    int action = InputInt("BEHAVIOUR MENU: Choose how to interact: ", InputType.With, 0, 6);
+                    int action = InputInt("BEHAVIOUR MENU: Choose how to interact: ", InputType.With, 0, 7);
 
                     switch (action)
                     {
@@ -367,14 +361,17 @@ namespace Lab_1
                             Console.WriteLine(carSel.RideCar(distance));
                             break;
                         case 6:
-                            if (carSel.currentFuel >= carSel.fuelCapacity)
+                            if (carSel.CurrentFuel >= carSel.FuelCapacity)
                             {
                                 Console.WriteLine("Tank is full.");
                                 break;
                             }
-                            double maxAdd = carSel.fuelCapacity - carSel.currentFuel;
-                            double fuel = InputDouble($"Fuel to add (max {maxAdd:F1}): ", InputType.With, 0);
+                            double maxAdd = carSel.FuelCapacity - carSel.CurrentFuel;
+                            double fuel = InputDouble($"Fuel to add (max {maxAdd:F1}): ", InputType.With, 0, maxAdd);
                             Console.WriteLine(carSel.Refuel(fuel));
+                            break;
+                        case 7:
+                            ChangeProperties(carSel);
                             break;
                         case 0:
                             Console.WriteLine("Returning to main menu...");
@@ -388,30 +385,90 @@ namespace Lab_1
             } while (true);
         }
 
+        static void ChangeProperties(Car carSel)
+        {
+            do
+            {
+                MessageBox.BoxItem("   Change Menu   ");
+                PrintHeader();
+                PrintCarLine(0, carSel);
+                Console.WriteLine("\n1. Change mark and model");
+                Console.WriteLine("2. Change color");
+                Console.WriteLine("3. Change horse power");
+                Console.WriteLine("4. Change weight");
+                Console.WriteLine("5. Change milage");
+                Console.WriteLine("6. Change fuel consumption per 100km");
+                Console.WriteLine("7. Change fuel capacity");
+                Console.WriteLine("8. Change production date\n");
+                Console.WriteLine("0. Back to behaviour menu\n");
+                //может добавть изменение количества дверей, автовластивість
+
+                int action = InputInt("CHANGE MENU: Choose a property to change: ", InputType.With, 0, 8);
+
+                try
+                {
+                    switch (action)
+                    {
+                        case 1:
+                            carSel.Mark = InputString("Enter new mark: ");
+                            carSel.Model = InputString("Enter new model: ");
+                            break;
+                        case 2:
+                            carSel.Color = (Color)InputInt("Enter new color (0=Red, 1=Blue, 2=Green, 3=Black, 4=White, 5=Grey): ");
+                            break;
+                        case 3:
+                            carSel.HorsePower = (float)InputDouble("Enter new horse power: ");
+                            break;
+                        case 4:
+                            carSel.Weight = (decimal)InputDouble("Enter new weight: ");
+                            break;
+                        case 5:
+                            carSel.Milage = InputDouble("Enter new milage: ");
+                            break;
+                        case 6:
+                            carSel.FuelConsumptionPer100km = InputDouble("Enter new fuel consumption per 100km: ");
+                            break;
+                        case 7:
+                            carSel.FuelCapacity = InputDouble("Enter new fuel capacity: ");
+                            break;
+                        case 8:
+                            carSel.ProductionDate = InputDateTime("Enter new production date: ");
+                            break;
+                        case 0:
+                            Console.WriteLine("Returning to behaviour menu...");
+                            return;
+                    }
+                    Console.WriteLine("Property updated successfully!");
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+            } while (true);
+        }
+
         static void PrintHeader()
         {
-            DrawLine(142);
-            Console.WriteLine("Index| Mark&Model           | Color  | HP   | Weight | Milage     | Cap    | Fuel   | Fuel per 100km | Speed  | Max speed | Date of production");
-            DrawLine(142);
+            DrawLine(151);
+            Console.WriteLine("Index| Mark&Model           | Color  | Doors | HP   | Weight | Milage     | Cap    | Fuel   | Fuel per 100km | Speed  | Max speed | Date of production");
+            DrawLine(151);
         }
 
         static void PrintCarLine(int index, Car car)
         {
             Console.WriteLine(
                 $"{index,4} | " +
-                $"{car.markAndModel,-20} | " +
-                $"{car.color,-6} | " +
-                $"{car.horsePower,4} | " +
-                $"{car.weight,6} | " +
-                $"{car.milage,10:F1} | " +
-                $"{car.fuelCapacity,6:F1} | " +
-                $"{car.currentFuel,6:F1} | " +
-                $"{car.fuelConsumptionPer100km,14:F1} | " +
-                $"{car.currentSpeed,6:F1} | " +
-                $"{car.maxSpeed,9:F1} | " +
-                $"{car.productionDate.ToString("yyyy-MM-dd")}"
+                $"{car.MarkAndModel,-20} | " +
+                $"{car.Color,-6} | " +
+                $"{car.NumberOfDoors,5} | " +
+                $"{car.HorsePower,4} | " +
+                $"{car.Weight,6} | " +
+                $"{car.Milage,10:F1} | " +
+                $"{car.FuelCapacity,6:F1} | " +
+                $"{car.CurrentFuel,6:F1} | " +
+                $"{car.FuelConsumptionPer100km,14:F1} | " +
+                $"{car.CurrentSpeed,6:F1} | " +
+                $"{car.MaxSpeed,9:F1} | " +
+                $"{car.ProductionDate:yyyy-MM-dd}"
                 );
-            DrawLine(142);
+            DrawLine(151);
         }
     }
 }
