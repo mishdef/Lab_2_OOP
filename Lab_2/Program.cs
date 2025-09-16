@@ -137,17 +137,144 @@ namespace Lab_2
                 return;
             }
 
-            string mark = InputString("Enter the cars mark: ", 1, 20);
-            string model = InputString("Enter the cars model: ", 1, 20);
-            Color color = (Color)InputInt("Choose the cars color:\n0. Red\n1. Blue\n2. Green\n3. Black\n4. White\n5. Grey\nYour choice: ", InputType.With, 0, 5);
-            float horsePower = (float)InputDouble("Enter the car's horse power: ", InputType.With, 20, 2000);
-            decimal weight = (decimal)InputDouble("Enter the car's weight (kg): ", InputType.With, 400, 8000);
-            double milage = InputDouble("Enter the cars milage (km): ", InputType.With, 0, 2000000);
-            double fuelConsumption = InputDouble("Enter the cars fuel consumption (l/100km): ", InputType.With, 0, 50);
-            double fuelCapacity = InputDouble("Enter the cars fuel capacity (l): ", InputType.With, 20, 200);
-            DateTime dateTime = InputDateTime("Enter the cars production date: ", new DateTime(1886, 1, 1), DateTime.Now);
+            Array.Resize(ref cars, cars.Length + 1);
+            cars[cars.Length - 1] = new Car();
 
-            Console.WriteLine(AddCar(mark, model, color, horsePower, weight, milage, fuelConsumption, fuelCapacity, dateTime));
+            while (true)
+            {
+                string mark = InputString("Enter the cars mark: ");
+
+                try
+                {
+                    cars[cars.Length - 1].Mark = mark;
+                    break;
+
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].Model = InputString("Enter the cars model: ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].Color = (Color)InputInt("Choose the cars color:\n0. Red\n1. Blue\n2. Green\n3. Black\n4. White\n5. Grey\nYour choice: ");
+                    break; 
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                int numberOfDoors = InputInt("Enter the number of doors: ");
+                try
+                {
+                    cars[cars.Length - 1].NumberOfDoors = numberOfDoors;
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].HorsePower = (float)InputDouble("Enter the car's horse power: ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].Weight = (decimal)InputDouble("Enter the car's weight (kg): ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].Milage = InputDouble("Enter the car's milage (km): ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].FuelConsumptionPer100km = (double)InputDouble("Enter the car's fuel consumption (l/100km): ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].FuelCapacity = InputDouble("Enter the car's fuel capacity (l): ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (true)
+            {
+                try
+                {
+                    cars[cars.Length - 1].ProductionDate = InputDateTime("Enter the cars production date: ");
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            Console.WriteLine($"Car {cars[cars.Length - 1].MarkAndModel} added successfully.");
         }
 
         static string AddCar(string mark, string model, Color color, float horsePower, decimal weight, double milage, double fuelConsumption, double fuelCapacity, DateTime productiDate)
@@ -166,7 +293,6 @@ namespace Lab_2
                 FuelCapacity = fuelCapacity,
                 ProductionDate = productiDate
             };
-            cars[cars.Length - 1].CurrentFuel = fuelCapacity;
 
             return "Car added successfully";
         }
@@ -334,8 +460,7 @@ namespace Lab_2
                     Console.WriteLine("3. Speed up");
                     Console.WriteLine("4. Slow down");
                     Console.WriteLine("5. Ride the car");
-                    Console.WriteLine("6. Refuel");
-                    Console.WriteLine("7. Change properties\n");
+                    Console.WriteLine("6. Refuel\n");
                     Console.WriteLine("0. Main menu\n");
 
                     int action = InputInt("BEHAVIOUR MENU: Choose how to interact: ", InputType.With, 0, 7);
@@ -370,9 +495,6 @@ namespace Lab_2
                             double fuel = InputDouble($"Fuel to add (max {maxAdd:F1}): ", InputType.With, 0, maxAdd);
                             Console.WriteLine(carSel.Refuel(fuel));
                             break;
-                        case 7:
-                            ChangeProperties(carSel);
-                            break;
                         case 0:
                             Console.WriteLine("Returning to main menu...");
                             return;
@@ -385,64 +507,6 @@ namespace Lab_2
             } while (true);
         }
 
-        static void ChangeProperties(Car carSel)
-        {
-            do
-            {
-                MessageBox.BoxItem("   Change Menu   ");
-                PrintHeader();
-                PrintCarLine(0, carSel);
-                Console.WriteLine("\n1. Change mark and model");
-                Console.WriteLine("2. Change color");
-                Console.WriteLine("3. Change horse power");
-                Console.WriteLine("4. Change weight");
-                Console.WriteLine("5. Change milage");
-                Console.WriteLine("6. Change fuel consumption per 100km");
-                Console.WriteLine("7. Change fuel capacity");
-                Console.WriteLine("8. Change production date\n");
-                Console.WriteLine("0. Back to behaviour menu\n");
-                //может добавть изменение количества дверей, автовластивість
-
-                int action = InputInt("CHANGE MENU: Choose a property to change: ", InputType.With, 0, 8);
-
-                try
-                {
-                    switch (action)
-                    {
-                        case 1:
-                            carSel.Mark = InputString("Enter new mark: ");
-                            carSel.Model = InputString("Enter new model: ");
-                            break;
-                        case 2:
-                            carSel.Color = (Color)InputInt("Enter new color (0=Red, 1=Blue, 2=Green, 3=Black, 4=White, 5=Grey): ");
-                            break;
-                        case 3:
-                            carSel.HorsePower = (float)InputDouble("Enter new horse power: ");
-                            break;
-                        case 4:
-                            carSel.Weight = (decimal)InputDouble("Enter new weight: ");
-                            break;
-                        case 5:
-                            carSel.Milage = InputDouble("Enter new milage: ");
-                            break;
-                        case 6:
-                            carSel.FuelConsumptionPer100km = InputDouble("Enter new fuel consumption per 100km: ");
-                            break;
-                        case 7:
-                            carSel.FuelCapacity = InputDouble("Enter new fuel capacity: ");
-                            break;
-                        case 8:
-                            carSel.ProductionDate = InputDateTime("Enter new production date: ");
-                            break;
-                        case 0:
-                            Console.WriteLine("Returning to behaviour menu...");
-                            return;
-                    }
-                    Console.WriteLine("Property updated successfully!");
-                }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
-            } while (true);
-        }
 
         static void PrintHeader()
         {

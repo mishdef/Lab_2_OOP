@@ -20,13 +20,21 @@ namespace Lab_2
         double _fuelCapacity;
         double _currentFuel;
         DateTime _productionDate;
-        double _fuelConsumptionPer100km; //new
+        double _fuelConsumptionPer100km;
+        int _numberOfDoors;
 
         bool _isStarted = false;
         double _currentSpeed = 0;
-        double _maxSpeed;
 
-        public int NumberOfDoors { get; set; } = 4; //new
+        public int NumberOfDoors 
+        {
+            get { return _numberOfDoors; }
+            set 
+            {
+                if (value < 2 || value > 5) throw new ArgumentException("Number of doors must be between 2 and 5.");
+                _numberOfDoors = value; 
+            }
+        }
 
         public string Mark
         {
@@ -34,7 +42,7 @@ namespace Lab_2
             {
                 if (string.IsNullOrEmpty(value)) throw new ArgumentException("Mark cannot be empty.");
                 if (value.Length < 1) throw new ArgumentException("Mark cannot be shorter than 1 character.");
-                if (value.Length > 10) throw new ArgumentException("Mark cannot be longer than 20 characters.");
+                if (value.Length > 10) throw new ArgumentException("Mark cannot be longer than 10 characters.");
                 if (!char.IsLetter(value[0])) throw new ArgumentException("Mark must start with a letter.");
 
                 _mark = value;
@@ -48,7 +56,7 @@ namespace Lab_2
             {
                 if (string.IsNullOrEmpty(value)) throw new ArgumentException("Mark cannot be empty.");
                 if (value.Length < 1) throw new ArgumentException("Mark cannot be shorter than 1 character.");
-                if (value.Length > 10) throw new ArgumentException("Mark cannot be longer than 20 characters.");
+                if (value.Length > 10) throw new ArgumentException("Mark cannot be longer than 10 characters.");
                 if (!char.IsLetter(value[0])) throw new ArgumentException("Mark must start with a letter.");
 
                 _model = value;
@@ -82,25 +90,13 @@ namespace Lab_2
             set
             {
                 if (value < 0) throw new ArgumentException("Speed cannot be negative.");
-                if (value > _maxSpeed) throw new ArgumentException("Speed cannot exceed maximum speed.");
+                if (value > MaxSpeed) throw new ArgumentException("Speed cannot exceed maximum speed.");
                 _currentSpeed = value;
             }
             get { return _currentSpeed; }
         }
 
-        public double MaxSpeed
-        {
-            set
-            {
-                if (value < 50)
-                {
-                    _maxSpeed = 50;
-                    return;
-                }
-                _maxSpeed = value;
-            }
-            get { return _maxSpeed; }
-        }
+        public double MaxSpeed { get; private set; } = 0;  //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
         public decimal Weight
         {
@@ -223,10 +219,10 @@ namespace Lab_2
             }
 
             _currentSpeed += increment;
-            if (_currentSpeed > _maxSpeed)
+            if (_currentSpeed > MaxSpeed)
             {
-                _currentSpeed = _maxSpeed;
-                return $"The car has reached its maximum speed of {_maxSpeed:F2} km/h."; //new
+                _currentSpeed = MaxSpeed;
+                return $"The car has reached its maximum speed of {MaxSpeed:F2} km/h.";
             }
             return $"The car's current speed is {_currentSpeed:F2} km/h.";
         }
@@ -277,7 +273,7 @@ namespace Lab_2
             }
         }
 
-        private double CalculateFuelConsumption(double distanceDrivenKM) //private
+        private double CalculateFuelConsumption(double distanceDrivenKM) //private new
         {
             double litersPerKM = _fuelConsumptionPer100km / 100.0;
             return litersPerKM * distanceDrivenKM;
